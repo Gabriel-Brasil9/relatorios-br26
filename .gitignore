@@ -1,0 +1,4 @@
+*.json
+!d/meta.json
+originais/
+__pycache__/
