@@ -19,6 +19,8 @@ Comandos
   textos-en textos_en.json                     aplica títulos, resumos e categorias em inglês
   traducao ID ARQUIVO_EN                       anexa a versão em inglês de um relatório
   traducoes PASTA                              anexa em lote: cada arquivo da pasta com o mesmo nome do original
+  capas capas.json                             aplica as capas (SVG) por ID: {"id": "<svg interno>"}
+  edit ID destaque=1                           põe o relatório entre os destaques da página inicial (destaque=0 tira)
 
 Requer: pip install cryptography. Para PPTX, LibreOffice (soffice) no PATH.
 """
@@ -215,6 +217,10 @@ def cmd_edit(a):
         if k in ("titulo_en", "periodo_en", "resumo_en"):
             r.setdefault("en", {})[k[:-3]] = v
             continue
+        if k == "destaque":
+            if v in ("1", "sim", "true"): r["destaque"] = True
+            else: r.pop("destaque", None)
+            continue
         if k not in ("titulo", "cat", "data", "periodo", "resumo"):
             sys.exit(f"Campo '{k}' não pode ser editado.")
         if k == "cat":
@@ -270,6 +276,17 @@ def cmd_textos_en(a):
     print(f"Textos em inglês aplicados. Sem tradução: {len(faltam)}")
     for n in faltam:
         print("  -", n)
+
+
+def cmd_capas(a):
+    key, cat = load_key(get_password())
+    capas = json.load(open(a.arquivo, encoding="utf-8"))
+    n = 0
+    for r in cat["relatorios"]:
+        if r["id"] in capas:
+            r["capa"] = capas[r["id"]]; n += 1
+    save_catalog(key, cat)
+    print(f"Capas aplicadas: {n}")
 
 
 def cmd_traducao(a):
@@ -328,6 +345,7 @@ def main():
     s.add_parser("senha").set_defaults(fn=cmd_senha)
     te = s.add_parser("textos-en"); te.add_argument("arquivo"); te.set_defaults(fn=cmd_textos_en)
     tr = s.add_parser("traducao"); tr.add_argument("id"); tr.add_argument("arquivo"); tr.set_defaults(fn=cmd_traducao)
+    cp = s.add_parser("capas"); cp.add_argument("arquivo"); cp.set_defaults(fn=cmd_capas)
     ts = s.add_parser("traducoes"); ts.add_argument("pasta"); ts.set_defaults(fn=cmd_traducoes)
     a = p.parse_args()
     a.fn(a)

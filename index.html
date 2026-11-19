@@ -133,41 +133,72 @@ a{color:inherit}
 .sort{flex:none;display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--ink-2);font-weight:600;font-size:14px;cursor:pointer;padding:8px 12px;margin-right:-12px;border-radius:999px}
 .sort:hover{background:var(--hover);color:var(--ink)}
 
-.month{display:flex;align-items:center;gap:12px;margin:34px 0 16px}
-.month h2{font:800 28px/1 var(--display);letter-spacing:-.025em;margin:0}
-.month span{font-size:13px;font-weight:700;color:var(--ink-2);background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);border-radius:999px;padding:3px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;list-style:none;margin:0;padding:0}
+@media (max-width:560px){.grid{grid-template-columns:1fr 1fr;gap:12px}}
+@media (max-width:400px){.grid{grid-template-columns:1fr}}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;list-style:none;margin:0;padding:0}
-@media (max-width:560px){.grid{grid-template-columns:1fr;gap:14px}}
-.card a{display:flex;flex-direction:column;height:100%;background:var(--card);border-radius:24px;text-decoration:none;overflow:hidden;box-shadow:inset 0 0 0 1.5px var(--line);transition:transform .18s ease, box-shadow .18s ease}
+/* capas: ilustração sobre um fundo claro da cor do tema (igual nos dois modos, para o desenho manter o contraste) */
+[data-c]{--cover:color-mix(in srgb, var(--c) 18%, #ffffff)}
+.art{display:block;width:100%;height:auto;aspect-ratio:16/10}
+.art .a{fill:var(--c)} .art .t{fill:var(--c);opacity:.35} .art .k{fill:#17172b} .art .w{fill:#fff} .art .y{fill:#ffcf3d}
+.art .num{font:800 64px var(--display);fill:#fff;letter-spacing:-.03em}
+.art .lbl{font:700 13px var(--sans);fill:#fff;letter-spacing:.06em}
+.art .mon{font:700 15px var(--sans);fill:#17172b;opacity:.75}
+
+.card{min-width:0}
+.card a{display:flex;flex-direction:column;height:100%;background:var(--card);border-radius:20px;text-decoration:none;overflow:hidden;box-shadow:inset 0 0 0 1.5px var(--line);transition:transform .18s ease, box-shadow .18s ease}
 @media (hover:hover){.card a:hover{transform:translateY(-4px);box-shadow:inset 0 0 0 1.5px transparent,var(--lift)}}
-.cover{position:relative;overflow:hidden;background:var(--soft);padding:20px 22px 22px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;isolation:isolate}
-.cover::before,.cover::after{content:"";position:absolute;z-index:-1}
-.cover h3{font:750 23px/1.12 var(--display);letter-spacing:-.02em;margin:0;max-width:68%;text-wrap:balance}
+.pic{background:var(--cover)}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.kicker{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+.card h3{font:750 18px/1.18 var(--display);letter-spacing:-.015em;margin:0;text-wrap:balance}
+.card p{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.meta{margin-top:auto;padding-top:6px;font-size:13px;font-weight:600;color:var(--ink-3)}
+
+/* destaques */
+.feat{display:grid;grid-template-columns:1.45fr 1fr 1fr;gap:18px;list-style:none;margin:0;padding:0}
+.feat .card h3{font-size:22px}
+.feat .card:first-child h3{font-size:clamp(24px,2.4vw,30px)}
+.feat .card p{-webkit-line-clamp:4;font-size:15px}
+.feat .card .body{padding:18px 20px 20px;gap:8px}
+@media (max-width:900px){.feat{grid-template-columns:1fr 1fr}.feat .card:first-child{grid-column:1/-1}}
+@media (max-width:560px){.feat{grid-template-columns:1fr}}
+
+/* cabeçalhos de seção e prateleiras */
+.sec-h{display:flex;align-items:center;gap:12px;margin:46px 0 14px}
+.sec-h .dot{flex:none;width:14px;height:14px;border-radius:50%;background:var(--c,var(--ink))}
+.sec-h h2{font:800 clamp(22px,2.6vw,28px)/1.05 var(--display);letter-spacing:-.025em;margin:0}
+.sec-h .n{font-size:13px;font-weight:700;color:var(--ink-2);background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);border-radius:999px;padding:3px 10px}
+.sec-h .tools{margin-left:auto;display:flex;align-items:center;gap:6px}
+.see{border:0;background:none;color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;padding:8px 12px;border-radius:999px;white-space:nowrap}
+.see:hover{background:var(--hover);color:var(--ink)}
+.arrow{width:36px;height:36px;border:0;border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);cursor:pointer;display:grid;place-items:center;color:var(--ink-2)}
+.arrow:hover{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink-3)}
+.arrow[disabled]{opacity:.35;cursor:default}
+@media (hover:none){.arrow{display:none}}
+.sec-p{color:var(--ink-2);font-size:15px;margin:-6px 0 16px;max-width:70ch}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3 * 16px) / 4);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;list-style:none;margin:0;padding:2px 2px 12px;scrollbar-width:none;scroll-behavior:smooth}
+.row::-webkit-scrollbar{display:none}
+.row>li{scroll-snap-align:start}
+@media (max-width:900px){.row{grid-auto-columns:calc((100% - 2 * 16px) / 2.5)}}
+@media (max-width:560px){.row{grid-auto-columns:76%;gap:12px;margin:0 -16px;padding:2px 16px 12px;scroll-padding-inline:16px}}
+
+/* pasta dos clippings */
+.folder{margin-top:52px}
+.folder a{display:grid;grid-template-columns:minmax(220px,360px) 1fr;align-items:stretch;background:var(--card);border-radius:24px;text-decoration:none;overflow:hidden;box-shadow:inset 0 0 0 1.5px var(--line);transition:transform .18s ease, box-shadow .18s ease}
+@media (hover:hover){.folder a:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1.5px transparent,var(--lift)}}
+.folder .pic{display:grid;place-items:center}
+.folder .txt{padding:26px 28px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.folder h2{font:800 clamp(24px,3vw,32px)/1.05 var(--display);letter-spacing:-.025em;margin:0}
+.folder p{margin:0;color:var(--ink-2);font-size:15.5px;max-width:52ch}
+.folder .open{align-self:flex-start;margin-top:6px;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:700;font-size:14.5px}
+@media (max-width:640px){.folder a{grid-template-columns:1fr}.folder .txt{padding:20px}}
+
 .tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tag{font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 10px;background:var(--card);color:var(--ink)}
 .tag.cat{background:var(--c);color:#fff}
 [data-c="exercito"] .tag.cat{color:#17172b}
-.body{padding:16px 22px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
-.body p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.5}
-.when{margin-top:auto;font-size:13.5px;font-weight:600;color:var(--ink-3);display:flex;align-items:center;gap:7px}
-.when svg{flex:none}
-
-/* formas de capa, uma por categoria: ficam no terço direito, longe do título */
-[data-c="panoramas"] .cover::before{width:160px;height:160px;border-radius:50%;background:var(--c);right:-62px;bottom:-66px;opacity:.9}
-[data-c="panoramas"] .cover::after{width:44px;height:44px;border-radius:50%;border:9px solid var(--c);right:18px;top:58px;opacity:.55}
-[data-c="clipping"] .cover::before{width:104px;height:130px;right:-14px;bottom:-22px;background:repeating-linear-gradient(0deg,var(--c) 0 11px,transparent 11px 22px);transform:rotate(-8deg);opacity:.85}
-[data-c="pautas"] .cover::before{width:140px;height:140px;right:-74px;bottom:-62px;background:var(--c);transform:rotate(45deg);border-radius:26px;opacity:.9}
-[data-c="pautas"] .cover::after{width:24px;height:24px;border-radius:50%;background:var(--c);right:28px;top:62px;opacity:.6}
-[data-c="frentes"] .cover::before{width:118px;height:40px;border-radius:999px;background:var(--c);right:-38px;bottom:56px;opacity:.85}
-[data-c="frentes"] .cover::after{width:88px;height:40px;border-radius:999px;background:var(--c);right:-22px;bottom:8px;opacity:.5}
-[data-c="adversarios"] .cover::before{width:140px;height:140px;border-radius:50%;border:24px solid var(--c);right:-64px;bottom:-58px;opacity:.85}
-[data-c="momentos"] .cover::before{width:96px;height:96px;right:-12px;bottom:-16px;background:var(--c);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);opacity:.85}
-[data-c="momentos"] .cover::after{width:32px;height:32px;right:24px;top:56px;background:var(--c);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);opacity:.5}
-[data-c="exercito"] .cover::before{width:96px;height:120px;right:-12px;bottom:-26px;background:radial-gradient(circle,var(--c) 6px,transparent 7px) 0 0/24px 24px;opacity:.9}
-[data-c="conteudos"] .cover::before{width:132px;height:118px;right:-56px;bottom:-44px;background:var(--c);border-radius:62% 38% 46% 54%/55% 48% 52% 45%;transform:rotate(-14deg);opacity:.9}
-[data-c="conteudos"] .cover::after{width:30px;height:30px;right:26px;top:58px;background:var(--c);border-radius:50%;opacity:.5}
-
 .empty{padding:64px 16px;text-align:center}
 .empty h2{font:800 30px var(--display);letter-spacing:-.02em;margin:0 0 8px}
 .empty p{color:var(--ink-2);margin:0 0 20px}
@@ -270,7 +301,7 @@ body.locked{overflow:hidden}
 
     <nav class="chips" id="chips" aria-label="Categorias"></nav>
 
-    <div class="bar">
+    <div class="bar" id="bar">
       <div class="desc" id="desc" aria-live="polite"></div>
       <button class="sort" id="sort" type="button"></button>
     </div>
@@ -328,7 +359,13 @@ const I18N = {
     pages:(n,f)=>f==="pptx"?n+" slides":n+(n===1?" página":" páginas"),
     opening:"Abrindo o relatório", noView:"Este arquivo não abre no navegador. Baixe para ver.", openPdf:"Abrir PDF",
     failH:"O relatório não abriu", failP:"A conexão pode ter caído no meio do caminho.", retry:"Tentar de novo",
-    onlyPt:"", onlyEn:"Em inglês", appTitle:"Arquivo BR26"
+    onlyPt:"", onlyEn:"Em inglês", appTitle:"Arquivo BR26",
+    home:"Início", featured:"Destaques", seeAll:"Ver todos", prev:"Anteriores", next:"Próximos",
+    dailyName:"Clippings diários", dailies:n=>n===1?"clipping diário":"clippings diários",
+    dailyDesc:"O que os presidenciáveis postaram em cada dia e quanto engajou, do 1º turno à véspera do 2º.",
+    editions:n=>n+(n===1?" edição":" edições"), openFolder:"Abrir pasta",
+    monShort:["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],
+    wd:["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"]
   },
   en: {
     months:["January","February","March","April","May","June","July","August","September","October","November","December"],
@@ -346,7 +383,13 @@ const I18N = {
     pages:(n,f)=>f==="pptx"?n+" slides":n+(n===1?" page":" pages"),
     opening:"Opening the report", noView:"This file does not open in the browser. Download it to view.", openPdf:"Open PDF",
     failH:"The report did not open", failP:"The connection may have dropped along the way.", retry:"Try again",
-    onlyPt:"Portuguese only for now", onlyEn:"", appTitle:"BR26 Archive"
+    onlyPt:"Portuguese only for now", onlyEn:"", appTitle:"BR26 Archive",
+    home:"Home", featured:"Featured", seeAll:"See all", prev:"Previous", next:"Next",
+    dailyName:"Daily clippings", dailies:n=>n===1?"daily clipping":"daily clippings",
+    dailyDesc:"What the presidential candidates posted each day and how much it engaged, from the first round to the eve of the runoff.",
+    editions:n=>n+(n===1?" edition":" editions"), openFolder:"Open folder",
+    monShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    wd:["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"]
   }
 };
 let lang = "pt";
@@ -467,12 +510,14 @@ function startApp(rerender){
   applyStatic();
   if (!current) document.title = T("appTitle");
   $("title").textContent = (lang === "en" && catalog.titulo_en) || catalog.titulo || "Relatórios";
-  const all = catalog.relatorios;
-  const months = new Set(all.map(r => r.data.slice(0,7))).size;
-  $("tally").innerHTML = `<div><b>${all.length}</b><span>${T("reports")(all.length)}</span></div><div><b>${catalog.categorias.length}</b><span>${T("themes")}</span></div><div><b>${months}</b><span>${T("months_")(months)}</span></div>`;
+  const all = catalog.relatorios, main = all.filter(r => r.cat !== DAILY), daily = all.length - main.length;
+  const themes = new Set(main.map(r => r.cat)).size;
+  $("tally").innerHTML = `<div><b>${main.length}</b><span>${T("reports")(main.length)}</span></div><div><b>${daily}</b><span>${T("dailies")(daily)}</span></div><div><b>${themes}</b><span>${T("themes")}</span></div>`;
   renderChips(); render(); if (!rerender) route();
 }
 
+const DAILY = "clipping";
+const byNew = (a, b) => b.data.localeCompare(a.data) || a.titulo.localeCompare(b.titulo);
 function filtered(){
   const words = norm(state.q).split(/\s+/).filter(Boolean);
   return catalog.relatorios.filter(r => {
@@ -481,41 +526,116 @@ function filtered(){
     const c = catalog.categorias.find(x => x.id === r.cat) || {};
     const hay = norm([r.titulo, r.resumo, r.periodo, r.en && r.en.titulo, r.en && r.en.resumo, c.nome, c.en && c.en.nome, r.nome].join(" "));
     return words.every(w => hay.includes(w));
-  }).sort((a, b) => (state.newest ? -1 : 1) * (a.data.localeCompare(b.data) || a.titulo.localeCompare(b.titulo)));
+  }).sort((a, b) => (state.newest ? 1 : -1) * byNew(a, b));
 }
 
 function renderChips(){
   const counts = {}; catalog.relatorios.forEach(r => counts[r.cat] = (counts[r.cat] || 0) + 1);
-  const items = [{id:"todas", nome:T("all"), n:catalog.relatorios.length}, ...catalog.categorias.map(c => ({...catOf(c.id), n:counts[c.id] || 0}))];
-  $("chips").innerHTML = items.filter(c => c.n).map(c =>
-    `<button class="chip" type="button" data-c="${esc(c.id)}" aria-pressed="${c.id === state.cat}"><span class="dot"></span>${esc(c.nome)}<span class="n">${c.n}</span></button>`).join("");
+  const cats = catalog.categorias.filter(c => c.id !== DAILY).concat(catalog.categorias.filter(c => c.id === DAILY));
+  const items = [{id:"todas", nome:T("home"), n:0}, ...cats.map(c => ({...catOf(c.id), n:counts[c.id] || 0}))];
+  $("chips").innerHTML = items.filter(c => c.id === "todas" || c.n).map(c =>
+    `<button class="chip" type="button" data-c="${esc(c.id)}" aria-pressed="${c.id === state.cat}"><span class="dot"></span>${esc(c.id === DAILY ? T("dailyName") : c.nome)}${c.id === "todas" ? "" : `<span class="n">${c.n}</span>`}</button>`).join("");
 }
-$("chips").onclick = e => {
-  const b = e.target.closest(".chip"); if (!b) return;
-  state.cat = b.dataset.c;
-  $("chips").querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b));
+function goCat(id){
+  state.cat = id;
+  $("chips").querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.c === id));
   render();
-};
+  const top = $("chips").getBoundingClientRect().top + scrollY - 12;
+  if (scrollY > top) scrollTo({top, behavior:"smooth"});
+}
+$("chips").onclick = e => { const b = e.target.closest(".chip"); if (b) goCat(b.dataset.c); };
 
-function card(r){
-  const c = catOf(r.cat);
+/* datas e capas */
+function fmtDate(d){
+  const [y, m, dd] = d.split("-").map(Number);
+  return lang === "en" ? T("monShort")[m-1] + " " + dd + ", " + y : dd + " " + T("monShort")[m-1] + " " + y;
+}
+function dailyArt(r){
+  const d = new Date(r.data + "T12:00:00");
+  return `<svg class="art" viewBox="0 0 320 200" aria-hidden="true">
+    <g transform="rotate(7 214 108)"><rect class="w" x="150" y="40" width="128" height="134" rx="10"/>
+    <rect class="t" x="166" y="62" width="96" height="9" rx="4.5"/><rect class="t" x="166" y="80" width="72" height="9" rx="4.5"/>
+    <rect class="t" x="166" y="104" width="96" height="6" rx="3"/><rect class="t" x="166" y="118" width="88" height="6" rx="3"/><rect class="t" x="166" y="132" width="94" height="6" rx="3"/><rect class="t" x="166" y="146" width="60" height="6" rx="3"/></g>
+    <rect class="a" x="48" y="40" width="124" height="124" rx="20"/>
+    <path class="k" d="M48 60 a20 20 0 0 1 20 -20 h84 a20 20 0 0 1 20 20 v14 h-124z"/>
+    <text class="lbl" x="110" y="62" text-anchor="middle">${esc(T("wd")[d.getDay()])}</text>
+    <text class="num" x="110" y="134" text-anchor="middle">${String(d.getDate()).padStart(2, "0")}</text>
+    <text class="mon" x="110" y="188" text-anchor="middle">${esc(T("monShort")[d.getMonth()])} ${d.getFullYear()}</text>
+  </svg>`;
+}
+const folderArt = () => `<svg class="art" viewBox="0 0 320 200" aria-hidden="true">
+  <path class="a" d="M70 52 h56 l14 14 h110 a12 12 0 0 1 12 12 v86 a12 12 0 0 1 -12 12 h-180 a12 12 0 0 1 -12 -12 v-100 a12 12 0 0 1 12 -12z" opacity=".55"/>
+  <g transform="rotate(-6 150 100)"><rect class="w" x="92" y="44" width="110" height="118" rx="8"/><rect class="t" x="106" y="62" width="80" height="8" rx="4"/><rect class="t" x="106" y="78" width="60" height="8" rx="4"/></g>
+  <g transform="rotate(5 190 100)"><rect class="w" x="136" y="40" width="110" height="118" rx="8"/><rect class="t" x="150" y="58" width="80" height="8" rx="4"/><rect class="t" x="150" y="74" width="66" height="8" rx="4"/><rect class="t" x="150" y="96" width="80" height="6" rx="3"/><rect class="t" x="150" y="108" width="72" height="6" rx="3"/></g>
+  <path class="a" d="M58 98 h204 a10 10 0 0 1 10 11 l-7 57 a12 12 0 0 1 -12 10 h-186 a12 12 0 0 1 -12 -10 l-7 -57 a10 10 0 0 1 10 -11z"/>
+  <rect class="w" x="132" y="122" width="56" height="10" rx="5" opacity=".8"/>
+</svg>`;
+function art(r){
+  if (r.capa) return `<svg class="art" viewBox="0 0 320 200" aria-hidden="true">${r.capa}</svg>`;
+  return dailyArt(r);
+}
+
+function card(r, opts){
+  opts = opts || {};
+  const c = catOf(r.cat), isDaily = r.cat === DAILY && !r.capa;
+  const title = isDaily ? cap(tx(r, "titulo").split("·").pop().trim()) : tx(r, "titulo");
   return `<li class="card" data-c="${esc(r.cat)}"><a href="#/r/${esc(r.id)}">
-    <div class="cover">
-      <div class="tags"><span class="tag cat">${esc(c.nome)}</span><span class="tag">${esc(fmtTag(r))}</span></div>
-      <h3>${esc(tx(r, "titulo"))}</h3>
-    </div>
+    <div class="pic">${art(r)}</div>
     <div class="body">
+      ${opts.kicker ? `<span class="kicker">${esc(r.cat === DAILY ? T("dailyName") : c.nome)}</span>` : ""}
+      <h3>${esc(title)}</h3>
       ${tx(r, "resumo") ? `<p>${esc(tx(r, "resumo"))}</p>` : ""}
-      ${tx(r, "periodo") ? `<div class="when">${CAL}${esc(tx(r, "periodo"))}</div>` : ""}
+      <div class="meta">${esc(fmtDate(r.data))} · ${esc(fmtTag(r))}</div>
     </div>
   </a></li>`;
 }
 
+const ARROW = d => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d ? "M9 6l6 6-6 6" : "M15 6l-6 6 6 6"}"/></svg>`;
+function renderHome(){
+  const main = catalog.relatorios.filter(r => r.cat !== DAILY).sort(byNew);
+  const daily = catalog.relatorios.filter(r => r.cat === DAILY).sort(byNew);
+  const feat = main.filter(r => r.destaque).slice(0, 3);
+  const shelves = catalog.categorias.filter(c => c.id !== DAILY).map(c => ({c: catOf(c.id), items: main.filter(r => r.cat === c.id)})).filter(s => s.items.length);
+  let h = "";
+  if (feat.length) h += `<section><div class="sec-h" style="margin-top:34px"><h2>${T("featured")}</h2></div><ul class="feat">${feat.map(r => card(r, {kicker:true})).join("")}</ul></section>`;
+  h += shelves.map(s => `
+    <section class="shelf" data-c="${esc(s.c.id)}">
+      <div class="sec-h"><span class="dot"></span><h2>${esc(s.c.nome)}</h2><span class="n">${s.items.length}</span>
+        <div class="tools"><button class="see" type="button" data-cat="${esc(s.c.id)}">${T("seeAll")}</button>
+        <button class="arrow" type="button" data-dir="-1" aria-label="${T("prev")}">${ARROW(0)}</button><button class="arrow" type="button" data-dir="1" aria-label="${T("next")}">${ARROW(1)}</button></div></div>
+      <ul class="row">${s.items.map(r => card(r)).join("")}</ul>
+    </section>`).join("");
+  if (daily.length) {
+    const ed = daily.filter(r => !r.capa);
+    const span = ed.length ? fmtShort(ed[ed.length-1].data) + " – " + fmtShort(ed[0].data) : "";
+    h += `<section class="folder" data-c="${DAILY}"><a href="#" data-cat="${DAILY}">
+      <div class="pic">${folderArt()}</div>
+      <div class="txt"><h2>${T("dailyName")}</h2><p>${T("dailyDesc")} ${T("editions")(daily.length)}${span ? ", " + span : ""}.</p><span class="open">${T("openFolder")} ${ARROW(1)}</span></div>
+    </a></section>`;
+  }
+  $("results").innerHTML = h;
+  $("results").querySelectorAll(".shelf").forEach(sec => {
+    const row = sec.querySelector(".row"), [pv, nx] = sec.querySelectorAll(".arrow");
+    const upd = () => { pv.disabled = row.scrollLeft < 4; nx.disabled = row.scrollLeft + row.clientWidth > row.scrollWidth - 4; const none = pv.disabled && nx.disabled; pv.hidden = nx.hidden = none; };
+    row.addEventListener("scroll", upd, {passive:true}); upd();
+    sec.querySelectorAll(".arrow").forEach(b => b.onclick = () => row.scrollBy({left: +b.dataset.dir * row.clientWidth * 0.9}));
+  });
+}
+function fmtShort(d){ const [, m, dd] = d.split("-").map(Number); return lang === "en" ? T("monShort")[m-1] + " " + dd : dd + " " + T("monShort")[m-1]; }
+$("results").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  e.preventDefault(); goCat(b.dataset.cat);
+});
+
 function render(){
+  const home = !state.q.trim() && state.cat === "todas";
+  $("bar").hidden = home;
+  if (home) return renderHome();
   const list = filtered();
   const cat = state.cat !== "todas" ? catOf(state.cat) : null;
-  const count = list.length + " " + (state.q ? T("found") : T("reports"))(list.length);
-  $("desc").textContent = (cat && cat.desc ? cat.desc + " " : "") + cap(count) + ".";
+  const isDaily = state.cat === DAILY;
+  const count = list.length + " " + (state.q ? T("found") : (isDaily ? T("dailies") : T("reports")))(list.length);
+  $("desc").textContent = cat ? "" : cap(count) + ".";
   $("sort").innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg>' +
     (state.newest ? T("newest") : T("oldest"));
   if (!list.length) {
@@ -523,13 +643,8 @@ function render(){
     $("reset").onclick = () => { state.q = ""; state.cat = "todas"; $("q").value = ""; syncSearch(); renderChips(); render(); };
     return;
   }
-  const groups = [];
-  list.forEach(r => { const k = r.data.slice(0,7); let g = groups[groups.length-1]; if (!g || g.k !== k) groups.push(g = {k, items:[]}); g.items.push(r); });
-  $("results").innerHTML = groups.map(g => `
-    <section>
-      <div class="month"><h2>${T("monthHead")(T("months")[+g.k.slice(5,7)-1], g.k.slice(0,4))}</h2><span>${g.items.length}</span></div>
-      <ul class="grid">${g.items.map(card).join("")}</ul>
-    </section>`).join("");
+  const head = cat ? `<div class="sec-h" data-c="${esc(cat.id)}" style="margin-top:10px"><span class="dot"></span><h2>${esc(isDaily ? T("dailyName") : cat.nome)}</h2><span class="n">${list.length}</span></div>${(isDaily ? T("dailyDesc") : cat.desc) ? `<p class="sec-p">${esc(isDaily ? T("dailyDesc") : cat.desc)}</p>` : ""}` : "";
+  $("results").innerHTML = head + `<ul class="grid">${list.map(r => card(r, {kicker: !cat})).join("")}</ul>`;
 }
 $("sort").onclick = () => { state.newest = !state.newest; render(); };
 function syncSearch(){ $("clear").hidden = !$("q").value; $("kbd").hidden = !!$("q").value; }
