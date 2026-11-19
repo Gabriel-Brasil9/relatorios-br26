@@ -99,11 +99,15 @@ a{color:inherit}
 
 .hero{padding:36px 0 28px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px}
 .hero h1{font:800 clamp(44px,7.4vw,92px)/.92 var(--display);letter-spacing:-.045em;margin:0;max-width:11ch}
-.tally{display:flex;gap:12px}
-.tally div{background:var(--card);border-radius:20px;padding:14px 18px;min-width:118px;box-shadow:inset 0 0 0 1.5px var(--line)}
-.tally b{display:block;font:800 34px/1 var(--display);letter-spacing:-.03em}
-.tally span{font-size:14px;color:var(--ink-2)}
-@media (max-width:760px){.hero{grid-template-columns:1fr;padding:20px 0 22px}.tally div{min-width:0;flex:1}}
+.tally{background:var(--card);border-radius:24px;padding:20px 24px 18px;min-width:280px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.tally .tot{display:flex;align-items:baseline;gap:12px}
+.tally .tot b{font:800 72px/.9 var(--display);letter-spacing:-.045em}
+.tally .tot span{font-size:16px;font-weight:600;color:var(--ink-2);max-width:9ch;line-height:1.2}
+.tally .split{display:flex;gap:22px;margin-top:16px;padding-top:14px;border-top:1.5px solid var(--line)}
+.tally .split div{display:flex;flex-direction:column}
+.tally .split b{font:800 24px/1 var(--display);letter-spacing:-.02em}
+.tally .split span{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+@media (max-width:760px){.hero{grid-template-columns:1fr;padding:20px 0 22px}.tally{min-width:0}}
 
 .search{position:relative}
 .search svg{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
@@ -363,6 +367,7 @@ const I18N = {
     failH:"O relatório não abriu", failP:"A conexão pode ter caído no meio do caminho.", retry:"Tentar de novo",
     onlyPt:"", onlyEn:"Em inglês", appTitle:"Arquivo BR26",
     home:"Início", featured:"Destaques", seeAll:"Ver todos", prev:"Anteriores", next:"Próximos",
+    total:"relatórios no total", specific:"relatórios específicos", dailyRep:"relatórios diários",
     dailyName:"Clippings diários", dailies:n=>n===1?"edição diária":"edições diárias",
     dailyDesc:"O que os presidenciáveis postaram em cada dia e quanto engajou, do 1º turno à véspera do 2º.",
     editions:n=>n+(n===1?" edição":" edições"), openFolder:"Abrir pasta",
@@ -387,6 +392,7 @@ const I18N = {
     failH:"The report did not open", failP:"The connection may have dropped along the way.", retry:"Try again",
     onlyPt:"Portuguese only for now", onlyEn:"", appTitle:"BR26 Archive",
     home:"Home", featured:"Featured", seeAll:"See all", prev:"Previous", next:"Next",
+    total:"reports in total", specific:"specific reports", dailyRep:"daily reports",
     dailyName:"Daily clippings", dailies:n=>n===1?"daily edition":"daily editions",
     dailyDesc:"What the presidential candidates posted each day and how much it engaged, from the first round to the eve of the runoff.",
     editions:n=>n+(n===1?" edition":" editions"), openFolder:"Open folder",
@@ -513,8 +519,7 @@ function startApp(rerender){
   if (!current) document.title = T("appTitle");
   $("title").textContent = (lang === "en" && catalog.titulo_en) || catalog.titulo || "Relatórios";
   const all = catalog.relatorios, main = all.filter(r => !isFolder(r.cat)), daily = all.length - main.length;
-  const themes = new Set(main.map(r => r.cat)).size;
-  $("tally").innerHTML = `<div><b>${main.length}</b><span>${T("reports")(main.length)}</span></div><div><b>${daily}</b><span>${T("dailies")(daily)}</span></div><div><b>${themes}</b><span>${T("themes")}</span></div>`;
+  $("tally").innerHTML = `<div class="tot"><b>${all.length}</b><span>${T("total")}</span></div><div class="split"><div><b>${main.length}</b><span>${T("specific")}</span></div><div><b>${daily}</b><span>${T("dailyRep")}</span></div></div>`;
   renderChips(); render(); if (!rerender) route();
 }
 
