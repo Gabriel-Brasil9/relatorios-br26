@@ -16,6 +16,9 @@ Comandos
   export-catalogo SAIDA.json                   tira o catálogo para editar à mão
   import-catalogo ENTRADA.json                 devolve o catálogo editado
   senha                                        troca a senha (pede a nova em SITE_SENHA_NOVA)
+  textos-en textos_en.json                     aplica títulos, resumos e categorias em inglês
+  traducao ID ARQUIVO_EN                       anexa a versão em inglês de um relatório
+  traducoes PASTA                              anexa em lote: cada arquivo da pasta com o mesmo nome do original
 
 Requer: pip install cryptography. Para PPTX, LibreOffice (soffice) no PATH.
 """
@@ -128,8 +131,36 @@ def make_entry(key, path, meta, pdf_dir=None):
     return entry
 
 
+PARTS = ("ver", "baixar", "ver_en", "baixar_en")
+
+
 def blobs_of(entry):
-    return {v["f"] for k in ("ver", "baixar") if (v := entry.get(k))}
+    return {v["f"] for k in PARTS if (v := entry.get(k))}
+
+
+def drop_blobs(files):
+    for f in files:
+        p = os.path.join(DATA, f + ".bin")
+        if os.path.exists(p):
+            os.remove(p)
+
+
+def attach_en(key, entry, path):
+    """Criptografa a versão em inglês e liga ao relatório (substitui a anterior)."""
+    old = {v["f"] for k in ("ver_en", "baixar_en") if (v := entry.get(k))} - {v["f"] for k in ("ver", "baixar") if (v := entry.get(k))}
+    ext = path.rsplit(".", 1)[-1].lower()
+    raw = open(path, "rb").read()
+    if ext == "pptx":
+        pdf = pptx_to_pdf(path)
+        entry["ver_en"] = {"f": write_blob(key, open(pdf, "rb").read()), "mime": MIMES["pdf"]}
+        entry["baixar_en"] = {"f": write_blob(key, raw), "mime": MIMES["pptx"], "nome": os.path.basename(path)}
+    elif ext in ("html", "pdf"):
+        part = {"f": write_blob(key, raw), "mime": MIMES[ext], "nome": os.path.basename(path)}
+        entry["ver_en"] = part
+        entry["baixar_en"] = part
+    else:
+        sys.exit(f"Formato não suportado para tradução: {path}")
+    drop_blobs(old)
 
 
 def check_cat(cat, cid):
@@ -181,6 +212,9 @@ def cmd_edit(a):
     r = next((x for x in cat["relatorios"] if x["id"] == a.id), None) or sys.exit("ID não encontrado.")
     for pair in a.campos:
         k, _, v = pair.partition("=")
+        if k in ("titulo_en", "periodo_en", "resumo_en"):
+            r.setdefault("en", {})[k[:-3]] = v
+            continue
         if k not in ("titulo", "cat", "data", "periodo", "resumo"):
             sys.exit(f"Campo '{k}' não pode ser editado.")
         if k == "cat":
@@ -194,10 +228,7 @@ def cmd_remove(a):
     key, cat = load_key(get_password())
     r = next((x for x in cat["relatorios"] if x["id"] == a.id), None) or sys.exit("ID não encontrado.")
     cat["relatorios"].remove(r)
-    for f in blobs_of(r):
-        p = os.path.join(DATA, f + ".bin")
-        if os.path.exists(p):
-            os.remove(p)
+    drop_blobs(blobs_of(r))
     save_catalog(key, cat)
     print("Removido:", r["titulo"])
 
@@ -218,6 +249,52 @@ def cmd_import(a):
             sys.exit(f"'{r['titulo']}' aponta para um arquivo que não existe.")
     save_catalog(key, new)
     print("Catálogo importado.")
+
+
+def cmd_textos_en(a):
+    key, cat = load_key(get_password())
+    en = json.load(open(a.arquivo, encoding="utf-8"))
+    if en.get("titulo"):
+        cat["titulo_en"] = en["titulo"]
+    for c in cat["categorias"]:
+        if c["id"] in en.get("categorias", {}):
+            c["en"] = en["categorias"][c["id"]]
+    faltam = []
+    for r in cat["relatorios"]:
+        t = en.get("relatorios", {}).get(r["nome"])
+        if t:
+            r["en"] = t
+        else:
+            faltam.append(r["nome"])
+    save_catalog(key, cat)
+    print(f"Textos em inglês aplicados. Sem tradução: {len(faltam)}")
+    for n in faltam:
+        print("  -", n)
+
+
+def cmd_traducao(a):
+    key, cat = load_key(get_password())
+    r = next((x for x in cat["relatorios"] if x["id"] == a.id), None) or sys.exit("ID não encontrado.")
+    attach_en(key, r, a.arquivo)
+    save_catalog(key, cat)
+    print("Versão em inglês anexada:", r["titulo"])
+
+
+def cmd_traducoes(a):
+    key, cat = load_key(get_password())
+    by_name = {r["nome"]: r for r in cat["relatorios"]}
+    n = 0
+    for f in sorted(os.listdir(a.pasta)):
+        r = by_name.get(f)
+        if not r:
+            print("  ignorado (sem original com esse nome):", f)
+            continue
+        attach_en(key, r, os.path.join(a.pasta, f))
+        n += 1
+        print("  ok", r["titulo"])
+    save_catalog(key, cat)
+    total = sum(1 for r in cat["relatorios"] if r.get("ver_en"))
+    print(f"{n} traduções anexadas. Com versão em inglês: {total} de {len(cat['relatorios'])}.")
 
 
 def cmd_senha(a):
@@ -249,6 +326,9 @@ def main():
     ex = s.add_parser("export-catalogo"); ex.add_argument("saida"); ex.set_defaults(fn=cmd_export)
     im = s.add_parser("import-catalogo"); im.add_argument("entrada"); im.set_defaults(fn=cmd_import)
     s.add_parser("senha").set_defaults(fn=cmd_senha)
+    te = s.add_parser("textos-en"); te.add_argument("arquivo"); te.set_defaults(fn=cmd_textos_en)
+    tr = s.add_parser("traducao"); tr.add_argument("id"); tr.add_argument("arquivo"); tr.set_defaults(fn=cmd_traducao)
+    ts = s.add_parser("traducoes"); ts.add_argument("pasta"); ts.set_defaults(fn=cmd_traducoes)
     a = p.parse_args()
     a.fn(a)
 

@@ -207,6 +207,14 @@ a{color:inherit}
 .loader i:nth-child(3){background:var(--c8);animation-delay:.24s}
 @keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}}
 body.locked{overflow:hidden}
+.lang{display:inline-flex;padding:3px;border-radius:999px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
+.lang button{border:0;background:none;height:34px;min-width:44px;padding:0 12px;border-radius:999px;cursor:pointer;font-weight:700;font-size:13.5px;color:var(--ink-3);letter-spacing:.02em}
+.lang button:hover{color:var(--ink)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.top .right{display:flex;align-items:center;gap:10px}
+.gate-side{position:relative}
+.gate-lang{position:absolute;top:20px;right:20px}
+.rtitle .tag.warn{background:#ffe9a8;color:#5a4300}
 </style>
 </head>
 <body>
@@ -215,19 +223,20 @@ body.locked{overflow:hidden}
 <main class="gate" id="gate" hidden>
   <div class="gate-art" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i><i class="e"></i><p>Eleições 2026</p></div>
   <div class="gate-side">
+    <div class="lang gate-lang" role="group" aria-label="Idioma / Language"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="en">EN</button></div>
     <form class="gate-card" id="loginForm" autocomplete="on">
       <h1>Arquivo BR26</h1>
-      <p class="lede">Todos os relatórios da campanha num lugar só. Digite a senha para entrar.</p>
+      <p class="lede" data-i18n="gateLede">Todos os relatórios da campanha num lugar só. Digite a senha para entrar.</p>
       <input type="text" name="username" value="arquivo" autocomplete="username" hidden>
-      <label class="sr" for="pw">Senha</label>
+      <label class="sr" for="pw" data-i18n="pw">Senha</label>
       <div class="field">
-        <input id="pw" type="password" autocomplete="current-password" placeholder="Senha" required autofocus>
-        <button type="button" class="peek" id="peek" aria-label="Mostrar senha">
+        <input id="pw" type="password" autocomplete="current-password" placeholder="Senha" data-i18n-ph="pw" required autofocus>
+        <button type="button" class="peek" id="peek" aria-label="Mostrar senha" data-i18n-aria="peek">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
-      <label class="remember"><input type="checkbox" id="remember"> Manter conectado neste aparelho</label>
-      <button class="go" id="enter" type="submit">Entrar</button>
+      <label class="remember"><input type="checkbox" id="remember"> <span data-i18n="remember">Manter conectado neste aparelho</span></label>
+      <button class="go" id="enter" type="submit" data-i18n="enter">Entrar</button>
       <div class="err" id="err" role="alert"></div>
     </form>
   </div>
@@ -241,7 +250,7 @@ body.locked{overflow:hidden}
         <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#5b5bf7"/><circle cx="22" cy="22" r="7" fill="#ffcf3d"/><rect x="7" y="7" width="11" height="11" rx="3" fill="#ff8ac4"/></svg>
         Arquivo BR26
       </a>
-      <button class="ghost" id="logout" type="button">Sair</button>
+      <div class="right"><div class="lang" role="group" aria-label="Idioma / Language"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="en">EN</button></div><button class="ghost" id="logout" type="button" data-i18n="logout">Sair</button></div>
     </header>
 
     <section class="hero">
@@ -251,10 +260,10 @@ body.locked{overflow:hidden}
 
     <div class="search">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <label class="sr" for="q">Buscar relatórios</label>
-      <input id="q" type="search" placeholder="Buscar por tema, nome ou palavra" autocomplete="off" spellcheck="false">
-      <kbd id="kbd" title="Atalho para buscar">/</kbd>
-      <button class="clear" id="clear" type="button" aria-label="Limpar busca" hidden>
+      <label class="sr" for="q" data-i18n="searchLabel">Buscar relatórios</label>
+      <input id="q" type="search" placeholder="Buscar por tema, nome ou palavra" data-i18n-ph="search" autocomplete="off" spellcheck="false">
+      <kbd id="kbd">/</kbd>
+      <button class="clear" id="clear" type="button" aria-label="Limpar busca" data-i18n-aria="clear" hidden>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </div>
@@ -270,7 +279,7 @@ body.locked{overflow:hidden}
 
     <footer class="foot">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-      Conteúdo criptografado. Só abre com a senha.
+      <span data-i18n="foot">Conteúdo criptografado. Só abre com a senha.</span>
     </footer>
   </div>
 </div>
@@ -278,16 +287,16 @@ body.locked{overflow:hidden}
 <!-- Leitor -->
 <section class="reader" id="reader" hidden aria-modal="true" role="dialog" aria-labelledby="rTitle">
   <div class="rbar" id="rBar">
-    <button class="back" id="back" type="button" aria-label="Voltar para a lista">
+    <button class="back" id="back" type="button" aria-label="Voltar para a lista" data-i18n-aria="back">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="rtitle"><strong id="rTitle"></strong><div class="tags" id="rTags"></div></div>
     <div class="ractions">
-      <button class="pill" id="rOpen" type="button" title="Abrir em nova aba">
+      <button class="pill" id="rOpen" type="button">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
-        <span class="lbl">Nova aba</span>
+        <span class="lbl" data-i18n="newTab">Nova aba</span>
       </button>
-      <button class="pill solid" id="rDown" type="button" title="Baixar">
+      <button class="pill solid" id="rDown" type="button">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
         <span class="lbl">Baixar</span>
       </button>
@@ -301,13 +310,73 @@ body.locked{overflow:hidden}
 "use strict";
 const $ = id => document.getElementById(id);
 const KEY_SLOT = "arquivo-chave";
-const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const LANG_SLOT = "arquivo-idioma";
+const I18N = {
+  pt: {
+    months:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
+    monthHead:(m,y)=>m.charAt(0).toUpperCase()+m.slice(1)+" de "+y,
+    gateLede:"Todos os relatórios da campanha num lugar só. Digite a senha para entrar.",
+    pw:"Senha", peek:"Mostrar senha", remember:"Manter conectado neste aparelho", enter:"Entrar", checking:"Verificando…",
+    wrong:"Senha incorreta. Confira e tente de novo.", loadFail:"Não foi possível carregar o arquivo. Recarregue a página.",
+    oldBrowser:"Este navegador não é compatível. Use uma versão recente de Chrome, Safari, Edge ou Firefox.",
+    logout:"Sair", searchLabel:"Buscar relatórios", search:"Buscar por tema, nome ou palavra", clear:"Limpar busca",
+    foot:"Conteúdo criptografado. Só abre com a senha.", back:"Voltar para a lista", newTab:"Nova aba", download:"Baixar", downloadPptx:"Baixar PPTX",
+    all:"Todos", reports:n=>n===1?"relatório":"relatórios", found:n=>n===1?"relatório encontrado":"relatórios encontrados",
+    themes:"temas", months_:n=>n===1?"mês":"meses",
+    newest:"Mais recentes primeiro", oldest:"Mais antigos primeiro",
+    emptyH:"Nada por aqui", emptyP:(q,c)=>"Nenhum relatório"+(q?" com “"+q+"”":"")+(c?" em "+c:"")+". Tente outra palavra ou veja todos.", emptyBtn:"Ver todos os relatórios",
+    pages:(n,f)=>f==="pptx"?n+" slides":n+(n===1?" página":" páginas"),
+    opening:"Abrindo o relatório", noView:"Este arquivo não abre no navegador. Baixe para ver.", openPdf:"Abrir PDF",
+    failH:"O relatório não abriu", failP:"A conexão pode ter caído no meio do caminho.", retry:"Tentar de novo",
+    onlyPt:"", onlyEn:"Em inglês", appTitle:"Arquivo BR26"
+  },
+  en: {
+    months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+    monthHead:(m,y)=>m+" "+y,
+    gateLede:"All the campaign reports in one place. Enter the password to sign in.",
+    pw:"Password", peek:"Show password", remember:"Keep me signed in on this device", enter:"Sign in", checking:"Checking…",
+    wrong:"Wrong password. Check it and try again.", loadFail:"The archive did not load. Reload the page.",
+    oldBrowser:"This browser is not supported. Use a recent version of Chrome, Safari, Edge or Firefox.",
+    logout:"Sign out", searchLabel:"Search reports", search:"Search by topic, name or keyword", clear:"Clear search",
+    foot:"Encrypted content. It only opens with the password.", back:"Back to the list", newTab:"New tab", download:"Download", downloadPptx:"Download PPTX",
+    all:"All", reports:n=>n===1?"report":"reports", found:n=>n===1?"report found":"reports found",
+    themes:"topics", months_:n=>n===1?"month":"months",
+    newest:"Newest first", oldest:"Oldest first",
+    emptyH:"Nothing here", emptyP:(q,c)=>"No reports"+(q?" matching “"+q+"”":"")+(c?" in "+c:"")+". Try another word or see them all.", emptyBtn:"See all reports",
+    pages:(n,f)=>f==="pptx"?n+" slides":n+(n===1?" page":" pages"),
+    opening:"Opening the report", noView:"This file does not open in the browser. Download it to view.", openPdf:"Open PDF",
+    failH:"The report did not open", failP:"The connection may have dropped along the way.", retry:"Try again",
+    onlyPt:"Portuguese only for now", onlyEn:"", appTitle:"BR26 Archive"
+  }
+};
+let lang = "pt";
+try { const l = localStorage.getItem(LANG_SLOT); if (l === "en" || l === "pt") lang = l; } catch(e){}
+const T = k => I18N[lang][k];
 const FMT = {html:"HTML", pdf:"PDF", pptx:"PPTX", xlsx:"XLSX"};
 const CAL = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
 
-let key = null, meta = null, catalog = null;
+let key = null, meta = null, catalog = null, current = null;
 let state = {cat:"todas", q:"", newest:true};
 const blobCache = new Map();
+
+function applyStatic(){
+  document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = T(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = T(el.dataset.i18nPh));
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", T(el.dataset.i18nAria)));
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  document.querySelector(".logo").lastChild.textContent = " " + T("appTitle");
+  $("gate").querySelector("h1").textContent = T("appTitle");
+}
+function setLang(l){
+  if (l === lang) return;
+  lang = l;
+  try { localStorage.setItem(LANG_SLOT, l); } catch(e){}
+  applyStatic();
+  if (!$("gate").hidden) { if ($("err").textContent) $("err").textContent = ""; return; }
+  if (catalog) { startApp(true); if (current) openReader(current); }
+}
+document.addEventListener("click", e => { const b = e.target.closest(".lang button"); if (b) setLang(b.dataset.lang); });
 
 /* ---------- armazenamento (pode falhar em modo privado) ---------- */
 const store = {
@@ -343,7 +412,7 @@ async function loadCatalog(){
 /* ---------- entrada ---------- */
 async function boot(){
   try { meta = await (await fetch("d/meta.json", {cache:"no-cache"})).json(); }
-  catch(e){ showGate("Não foi possível carregar o arquivo. Recarregue a página."); return; }
+  catch(e){ showGate(T("loadFail")); return; }
   const saved = store.get();
   if (saved) {
     try {
@@ -363,7 +432,7 @@ $("peek").onclick = () => { const i = $("pw"); i.type = i.type === "password" ? 
 $("loginForm").onsubmit = async ev => {
   ev.preventDefault();
   const pw = $("pw").value; if (!pw) return;
-  $("enter").disabled = true; $("enter").textContent = "Verificando…"; $("err").textContent = "";
+  $("enter").disabled = true; $("enter").textContent = T("checking"); $("err").textContent = "";
   try {
     key = await deriveKey(pw);
     await loadCatalog();
@@ -372,11 +441,11 @@ $("loginForm").onsubmit = async ev => {
     startApp();
   } catch(e){
     key = null;
-    $("err").textContent = "Senha incorreta. Confira e tente de novo.";
+    $("err").textContent = T("wrong");
     const f = $("loginForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
     $("pw").select();
   } finally {
-    $("enter").disabled = false; $("enter").textContent = "Entrar";
+    $("enter").disabled = false; $("enter").textContent = T("enter");
   }
 };
 $("logout").onclick = () => { store.clear(); key = null; catalog = null; blobCache.forEach(u => URL.revokeObjectURL(u)); blobCache.clear(); history.replaceState(null, "", location.pathname); showGate(); };
@@ -384,24 +453,24 @@ $("home").onclick = e => { e.preventDefault(); state.cat = "todas"; state.q = ""
 
 /* ---------- lista ---------- */
 const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-const catOf = id => catalog.categorias.find(c => c.id === id) || {id, nome:id};
+const catOf = id => { const c = catalog.categorias.find(c => c.id === id) || {id, nome:id}; return lang === "en" && c.en ? {...c, ...c.en} : c; };
+const tx = (r, f) => (lang === "en" && r.en && r.en[f]) || r[f] || "";
+const hasEn = r => !!r.ver_en;
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const plural = (n, a, b) => n + " " + (n === 1 ? a : b);
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-function pages(r){
-  if (!r.pag) return "";
-  return r.pag + (r.fmt === "pptx" ? " slides" : (r.pag === 1 ? " página" : " páginas"));
-}
+function pages(r){ return r.pag ? T("pages")(r.pag, r.fmt) : ""; }
 function fmtTag(r){ const f = FMT[r.fmt] || (r.fmt || "").toUpperCase(); return r.pag ? f + ", " + pages(r) : f; }
 
-function startApp(){
+function startApp(rerender){
   $("gate").hidden = true; $("app").hidden = false;
-  document.title = "Arquivo BR26";
-  $("title").textContent = catalog.titulo || "Relatórios";
+  applyStatic();
+  if (!current) document.title = T("appTitle");
+  $("title").textContent = (lang === "en" && catalog.titulo_en) || catalog.titulo || "Relatórios";
   const all = catalog.relatorios;
   const months = new Set(all.map(r => r.data.slice(0,7))).size;
-  $("tally").innerHTML = `<div><b>${all.length}</b><span>relatórios</span></div><div><b>${catalog.categorias.length}</b><span>temas</span></div><div><b>${months}</b><span>${months === 1 ? "mês" : "meses"}</span></div>`;
-  renderChips(); render(); route();
+  $("tally").innerHTML = `<div><b>${all.length}</b><span>${T("reports")(all.length)}</span></div><div><b>${catalog.categorias.length}</b><span>${T("themes")}</span></div><div><b>${months}</b><span>${T("months_")(months)}</span></div>`;
+  renderChips(); render(); if (!rerender) route();
 }
 
 function filtered(){
@@ -409,14 +478,15 @@ function filtered(){
   return catalog.relatorios.filter(r => {
     if (state.cat !== "todas" && r.cat !== state.cat) return false;
     if (!words.length) return true;
-    const hay = norm([r.titulo, r.resumo, r.periodo, catOf(r.cat).nome, r.nome].join(" "));
+    const c = catalog.categorias.find(x => x.id === r.cat) || {};
+    const hay = norm([r.titulo, r.resumo, r.periodo, r.en && r.en.titulo, r.en && r.en.resumo, c.nome, c.en && c.en.nome, r.nome].join(" "));
     return words.every(w => hay.includes(w));
   }).sort((a, b) => (state.newest ? -1 : 1) * (a.data.localeCompare(b.data) || a.titulo.localeCompare(b.titulo)));
 }
 
 function renderChips(){
   const counts = {}; catalog.relatorios.forEach(r => counts[r.cat] = (counts[r.cat] || 0) + 1);
-  const items = [{id:"todas", nome:"Todos", n:catalog.relatorios.length}, ...catalog.categorias.map(c => ({...c, n:counts[c.id] || 0}))];
+  const items = [{id:"todas", nome:T("all"), n:catalog.relatorios.length}, ...catalog.categorias.map(c => ({...catOf(c.id), n:counts[c.id] || 0}))];
   $("chips").innerHTML = items.filter(c => c.n).map(c =>
     `<button class="chip" type="button" data-c="${esc(c.id)}" aria-pressed="${c.id === state.cat}"><span class="dot"></span>${esc(c.nome)}<span class="n">${c.n}</span></button>`).join("");
 }
@@ -432,24 +502,24 @@ function card(r){
   return `<li class="card" data-c="${esc(r.cat)}"><a href="#/r/${esc(r.id)}">
     <div class="cover">
       <div class="tags"><span class="tag cat">${esc(c.nome)}</span><span class="tag">${esc(fmtTag(r))}</span></div>
-      <h3>${esc(r.titulo)}</h3>
+      <h3>${esc(tx(r, "titulo"))}</h3>
     </div>
     <div class="body">
-      ${r.resumo ? `<p>${esc(r.resumo)}</p>` : ""}
-      ${r.periodo ? `<div class="when">${CAL}${esc(r.periodo)}</div>` : ""}
+      ${tx(r, "resumo") ? `<p>${esc(tx(r, "resumo"))}</p>` : ""}
+      ${tx(r, "periodo") ? `<div class="when">${CAL}${esc(tx(r, "periodo"))}</div>` : ""}
     </div>
   </a></li>`;
 }
 
 function render(){
   const list = filtered();
-  const cat = catalog.categorias.find(c => c.id === state.cat);
-  const count = state.q ? plural(list.length, "relatório encontrado", "relatórios encontrados") : plural(list.length, "relatório", "relatórios");
+  const cat = state.cat !== "todas" ? catOf(state.cat) : null;
+  const count = list.length + " " + (state.q ? T("found") : T("reports"))(list.length);
   $("desc").textContent = (cat && cat.desc ? cat.desc + " " : "") + cap(count) + ".";
   $("sort").innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg>' +
-    (state.newest ? "Mais recentes primeiro" : "Mais antigos primeiro");
+    (state.newest ? T("newest") : T("oldest"));
   if (!list.length) {
-    $("results").innerHTML = `<div class="empty"><h2>Nada por aqui</h2><p>Nenhum relatório${state.q ? " com “" + esc(state.q) + "”" : ""}${cat ? " em " + esc(cat.nome) : ""}. Tente outra palavra ou veja todos.</p><button class="pill solid" type="button" id="reset" style="margin:auto">Ver todos os relatórios</button></div>`;
+    $("results").innerHTML = `<div class="empty"><h2>${T("emptyH")}</h2><p>${T("emptyP")(esc(state.q), cat ? esc(cat.nome) : "")}</p><button class="pill solid" type="button" id="reset" style="margin:auto">${T("emptyBtn")}</button></div>`;
     $("reset").onclick = () => { state.q = ""; state.cat = "todas"; $("q").value = ""; syncSearch(); renderChips(); render(); };
     return;
   }
@@ -457,7 +527,7 @@ function render(){
   list.forEach(r => { const k = r.data.slice(0,7); let g = groups[groups.length-1]; if (!g || g.k !== k) groups.push(g = {k, items:[]}); g.items.push(r); });
   $("results").innerHTML = groups.map(g => `
     <section>
-      <div class="month"><h2>${cap(MESES[+g.k.slice(5,7)-1])} de ${g.k.slice(0,4)}</h2><span>${g.items.length}</span></div>
+      <div class="month"><h2>${T("monthHead")(T("months")[+g.k.slice(5,7)-1], g.k.slice(0,4))}</h2><span>${g.items.length}</span></div>
       <ul class="grid">${g.items.map(card).join("")}</ul>
     </section>`).join("");
 }
@@ -471,7 +541,7 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- leitor ---------- */
-let current = null, cameFromList = false;
+let cameFromList = false;
 window.addEventListener("hashchange", () => { cameFromList = true; route(); });
 function route(){
   if (!catalog) return;
@@ -500,44 +570,49 @@ function canInlinePdf(){
 }
 const LOADER = '<div class="loader"><i></i><i></i><i></i></div>';
 
+const viewPart = r => (lang === "en" && r.ver_en) || r.ver;
+const downPart = r => (lang === "en" && r.baixar_en) || r.baixar || r.ver;
 async function openReader(r){
   current = r;
   const c = catOf(r.cat);
+  const ver = viewPart(r);
   document.body.classList.add("locked");
   $("reader").hidden = false;
   $("rBar").dataset.c = r.cat;
-  $("rTitle").textContent = r.titulo;
-  document.title = r.titulo;
-  $("rTags").innerHTML = `<span class="tag cat">${esc(c.nome)}</span>${r.periodo ? `<span class="tag">${esc(r.periodo)}</span>` : ""}<span class="tag">${esc(fmtTag(r))}</span>`;
-  $("rOpen").hidden = !r.ver;
-  $("rDown").querySelector(".lbl").textContent = r.fmt === "pptx" ? "Baixar PPTX" : "Baixar";
-  stateBox(`${LOADER}Abrindo o relatório${r.tam > 1.5e6 ? " (" + (r.tam/1e6).toFixed(1).replace(".", ",") + " MB)" : ""}…`);
+  $("rTitle").textContent = tx(r, "titulo");
+  document.title = tx(r, "titulo");
+  const warn = lang === "en" && !hasEn(r) && T("onlyPt");
+  $("rTags").innerHTML = `<span class="tag cat">${esc(c.nome)}</span>${warn ? `<span class="tag warn">${esc(warn)}</span>` : ""}${tx(r, "periodo") ? `<span class="tag">${esc(tx(r, "periodo"))}</span>` : ""}<span class="tag">${esc(fmtTag(r))}</span>`;
+  $("rOpen").hidden = !ver;
+  $("rDown").querySelector(".lbl").textContent = r.fmt === "pptx" ? T("downloadPptx") : T("download");
+  const mb = r.tam > 1.5e6 ? " (" + (r.tam/1e6).toFixed(1).replace(".", lang === "en" ? "." : ",") + " MB)" : "";
+  stateBox(`${LOADER}${T("opening")}${mb}…`);
   try {
-    if (!r.ver) { stateBox(`<h2>${esc(r.titulo)}</h2><p>Este arquivo não abre no navegador. Baixe para ver.</p><div class="row"><button class="pill solid" data-act="down">Baixar</button></div>`); return; }
-    if (r.ver.mime === "text/html") {
-      const raw = await decrypt(await fetchBin(r.ver.f));
+    if (!ver) { stateBox(`<h2>${esc(tx(r, "titulo"))}</h2><p>${T("noView")}</p><div class="row"><button class="pill solid" data-act="down">${T("download")}</button></div>`); return; }
+    if (ver.mime === "text/html") {
+      const raw = await decrypt(await fetchBin(ver.f));
       if (current !== r) return;
       let html = new TextDecoder().decode(raw);
       html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + IFRAME_GUARD) : IFRAME_GUARD + html;
       const fr = document.createElement("iframe");
-      fr.title = r.titulo;
+      fr.title = tx(r, "titulo");
       fr.setAttribute("sandbox", "allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads allow-forms allow-modals");
       fr.srcdoc = html;
       $("rBody").replaceChildren(fr);
-    } else if (r.ver.mime === "application/pdf" && canInlinePdf()) {
-      const url = await getBlob(r.ver);
+    } else if (ver.mime === "application/pdf" && canInlinePdf()) {
+      const url = await getBlob(ver);
       if (current !== r) return;
       const fr = document.createElement("iframe");
-      fr.title = r.titulo; fr.src = url + "#view=FitH";
+      fr.title = tx(r, "titulo"); fr.src = url + "#view=FitH";
       $("rBody").replaceChildren(fr);
     } else {
-      await getBlob(r.ver);
+      await getBlob(ver);
       if (current !== r) return;
-      stateBox(`<h2>${esc(r.titulo)}</h2><p>${esc(fmtTag(r))}</p><div class="row"><button class="pill solid" data-act="open">Abrir PDF</button><button class="pill" data-act="down">Baixar</button></div>`);
+      stateBox(`<h2>${esc(tx(r, "titulo"))}</h2><p>${esc(fmtTag(r))}</p><div class="row"><button class="pill solid" data-act="open">${T("openPdf")}</button><button class="pill" data-act="down">${T("download")}</button></div>`);
     }
   } catch(e){
     if (current !== r) return;
-    stateBox(`<h2>O relatório não abriu</h2><p>A conexão pode ter caído no meio do caminho.</p><div class="row"><button class="pill solid" data-act="retry">Tentar de novo</button></div>`);
+    stateBox(`<h2>${T("failH")}</h2><p>${T("failP")}</p><div class="row"><button class="pill solid" data-act="retry">${T("retry")}</button></div>`);
   }
 }
 $("rBody").onclick = e => {
@@ -548,21 +623,22 @@ function hideReader(){
   current = null;
   $("reader").hidden = true; $("rBody").replaceChildren();
   document.body.classList.remove("locked");
-  if (catalog) document.title = "Arquivo BR26";
+  if (catalog) document.title = T("appTitle");
 }
 async function openNewTab(){
-  if (!current || !current.ver) return;
+  const ver = current && viewPart(current);
+  if (!ver) return;
   const w = window.open("", "_blank");
-  try { const url = await getBlob(current.ver); if (w) w.location.href = url; else location.href = url; }
+  try { const url = await getBlob(ver); if (w) w.location.href = url; else location.href = url; }
   catch(e){ if (w) w.close(); }
 }
 async function download(){
   if (!current) return;
-  const part = current.baixar || current.ver;
+  const part = downPart(current);
   try {
     const url = await getBlob(part);
     const a = document.createElement("a");
-    a.href = url; a.download = part === current.ver && current.fmt === "pptx" ? current.nome.replace(/\.pptx$/i, ".pdf") : current.nome;
+    a.href = url; a.download = part.nome || current.nome;
     document.body.appendChild(a); a.click(); a.remove();
   } catch(e){}
 }
@@ -570,8 +646,8 @@ $("rOpen").onclick = openNewTab;
 $("rDown").onclick = download;
 
 if (!window.crypto || !crypto.subtle || typeof DecompressionStream === "undefined") {
-  showGate("Este navegador não é compatível. Use uma versão recente de Chrome, Safari, Edge ou Firefox.");
-} else boot();
+  applyStatic(); showGate(T("oldBrowser"));
+} else { applyStatic(); boot(); }
 })();
 </script>
 </body>
